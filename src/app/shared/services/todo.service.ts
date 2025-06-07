@@ -82,7 +82,11 @@ export class TodoService {
   }
 
   clearCompletedTasks() {
-    this.todos = this.todos.filter(({ completed }) => completed === false);
-    this.updateLocalStorageAndSave();
+    const wantToRemove = window.confirm("Você tem certeza que deseja remover as tarefas concluídas?");
+
+    if (wantToRemove){
+      this.todos = this.todos.filter(({ completed }) => completed === false);
+      this.updateLocalStorageAndSave();
+    }
   }
 }
