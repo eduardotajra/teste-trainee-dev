@@ -14,7 +14,6 @@ export class NewTaskComponent {
 
   count = 0;
   addTask() {
-    if(this.count > 0) return
     const newTodo: Todo = {
       id: this.todoService.getTodoNewId(),
       title: this.newTaskTitle,
@@ -23,6 +22,5 @@ export class NewTaskComponent {
 
     this.todoService.addTodo(newTodo);
     this.newTaskTitle = '';
-    this.count++
   }
 }
