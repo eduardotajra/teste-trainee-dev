@@ -7,7 +7,7 @@ import { Todo } from '../models/todo.model';
 })
 export class TodoService {
   private todos!: Todo[];
-
+  public sharedTaskTitle: string = '';
   constructor() {
     this.loadFromLocalStorage();
   }
@@ -59,6 +59,17 @@ export class TodoService {
       this.updateLocalStorageAndSave();
     }
   }
+
+  editTodo(todoId: number, newTodo: Todo): void{
+    const index = this.todos.findIndex(todo => todo.id === todoId);
+    if(index !== -1){
+      this.todos.splice(index, 1);
+      this.addTodo(newTodo);
+      this.sortTodos();
+      this.updateLocalStorageAndSave();
+    }
+  }
+  
 
   getTodoNewId(): number {
     return this.todos.reduce((maxId, todo) => Math.max(maxId, todo.id), 0) + 1;

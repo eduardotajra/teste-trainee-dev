@@ -13,6 +13,10 @@ export class NewTaskComponent {
   constructor(private todoService: TodoService) { }
 
   count = 0;
+  updateSharedTitle(newTaskTitle: string) {
+    this.todoService.sharedTaskTitle = newTaskTitle;
+  }
+
   addTask() {
     const newTodo: Todo = {
       id: this.todoService.getTodoNewId(),

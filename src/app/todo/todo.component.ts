@@ -36,10 +36,11 @@ export class TodoComponent implements OnInit {
   updateTodo(updatedTodo: Todo) {
     this.todoService.updateTodo(updatedTodo);
   }
-
+  
   deleteTodo(todoId: number) {
     this.todoService.deleteTodo(todoId);
   }
+
 
   clearAll() {
     if (this.todos.length > 0 && confirm('Are you sure you want to clear all tasks?')) {
