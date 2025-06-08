@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Todo } from '../../shared/models/todo.model';
 import { TodoService } from 'src/app/shared/services/todo.service';
 import { Filter } from 'bad-words';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-new-task',
@@ -36,7 +37,11 @@ export class NewTaskComponent {
     filter.addWords(...palavroes);
 
     if (filter.isProfane(this.newTaskTitle)) {
-      alert("Não é permitido cadastrar tarefas com palavras obscenas.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Conteúdo Inválido',
+        text: 'Não é permitido cadastrar tarefas com palavras obscenas.'
+      });
       return;
     }
 
@@ -68,7 +73,11 @@ export class NewTaskComponent {
     this.newTaskTitle = '';
 
   } else {
-    alert("O título da tarefa não pode estar em branco.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Campo Vazio',
+      text: 'O título da tarefa não pode estar em branco.'
+    });
   }
 }
 }

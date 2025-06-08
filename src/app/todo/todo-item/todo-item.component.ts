@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Todo } from '../../shared/models/todo.model';
 import { TodoService } from '../../shared/services/todo.service';
 import { Filter } from 'bad-words';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-todo-item',
@@ -15,9 +16,19 @@ export class TodoItemComponent {
   constructor(private todoService: TodoService) {}
 
   deleteTodo(): void {
-    if (confirm('Are you sure you want to delete this task?')) {
-      this.todoService.deleteTodo(this.todo.id);
-    }
+    Swal.fire({
+      title: 'Remover Tarefa?',
+      text: "Você realmente quer remover esta tarefa?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não',
+      confirmButtonColor: '#d33'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.todoService.deleteTodo(this.todo.id);
+      }
+    });
   }
 
   editTodo(): void {
@@ -38,14 +49,23 @@ export class TodoItemComponent {
     filter.addWords(...palavroes);
     
     if (filter.isProfane(newTitle)) {
-      alert("Não é permitido cadastrar tarefas com palavras obscenas.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Conteúdo Inválido',
+        text: 'Não é permitido cadastrar tarefas com palavras obscenas.'
+      });
       return;
     }
 
-    if (!newTitle || !newTitle.trim() || newTitle == null) {
-      alert("Por favor, digite o novo título no campo 'Título da Tarefa' antes de clicar em Editar.");
+    if (!newTitle || !newTitle.trim()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Campo Vazio',
+        text: "Por favor, digite o novo título no campo 'Título da Tarefa' antes de clicar em Editar."
+      });
       return;
     }
+    
     this.todo.title = newTitle;
     this.todoService.updateTodo(this.todo);
   }

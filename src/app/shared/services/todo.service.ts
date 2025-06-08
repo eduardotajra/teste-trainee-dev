@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Todo } from '../models/todo.model';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -93,11 +94,29 @@ export class TodoService {
   }
 
   clearCompletedTasks() {
-    const wantToRemove = window.confirm("Você tem certeza que deseja remover as tarefas concluídas?");
-
-    if (wantToRemove){
-      this.todos = this.todos.filter(({ completed }) => completed === false);
-      this.updateLocalStorageAndSave();
-    }
+    Swal.fire({
+      title: 'Você tem certeza?',
+      text: "As tarefas concluídas serão removidas permanentemente!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, pode remover!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      // Este código só executa DEPOIS que o usuário clica em um dos botões.
+      if (result.isConfirmed) {
+        // Se ele clicou em "Sim", a lógica de remoção entra aqui.
+        this.todos = this.todos.filter(({ completed }) => completed === false);
+        this.updateLocalStorageAndSave();
+        
+        // Bônus: um feedback de sucesso!
+        Swal.fire(
+          'Removidas!',
+          'As tarefas concluídas foram removidas.',
+          'success'
+        );
+      }
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Todo } from '../shared/models/todo.model';
 import { TodoService } from '../shared/services/todo.service';
 import { jsPDF } from "jspdf";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-todo',
@@ -79,9 +80,22 @@ export class TodoComponent implements OnInit {
 
 
   clearAll() {
-    if (this.todos.length > 0 && confirm('Are you sure you want to clear all tasks?')) {
-      this.todoService.clearAll();
-      this.loadTodos();
+    if (this.todos.length > 0) {
+      Swal.fire({
+        title: 'Limpar Tudo?',
+        text: "Você tem certeza que quer remover TODAS as tarefas? Esta ação não pode ser desfeita.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, limpar tudo!',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d33'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.todoService.clearAll();
+          this.loadTodos();
+          Swal.fire('Tudo limpo!', 'Sua lista de tarefas está vazia.', 'success');
+        }
+      });
     }
   }
 
