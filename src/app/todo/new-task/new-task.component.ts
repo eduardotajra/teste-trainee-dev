@@ -18,13 +18,18 @@ export class NewTaskComponent {
   }
 
   addTask() {
-    const newTodo: Todo = {
-      id: this.todoService.getTodoNewId(),
-      title: this.newTaskTitle,
-      completed: false
-    };
+    if(this.newTaskTitle){
+        const newTodo: Todo = {
+        id: this.todoService.getTodoNewId(),
+        title: this.newTaskTitle,
+        completed: false
+      };
 
-    this.todoService.addTodo(newTodo);
-    this.newTaskTitle = '';
+      this.todoService.addTodo(newTodo);
+      this.newTaskTitle = '';
+    }
+    else{
+      alert("O título da tarefa não pode estar em branco.")
+    }
   }
 }
