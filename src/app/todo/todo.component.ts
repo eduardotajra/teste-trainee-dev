@@ -13,6 +13,10 @@ export class TodoComponent implements OnInit {
 
   constructor(private todoService: TodoService) { }
 
+  sortTasksAlphabetically(): void {
+    this.todos.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
   ngOnInit(): void {
     this.loadTodos();
   }
