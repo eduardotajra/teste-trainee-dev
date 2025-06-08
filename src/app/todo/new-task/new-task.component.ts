@@ -18,7 +18,7 @@ export class NewTaskComponent {
   }
 
   addTask() {
-    if(this.newTaskTitle){
+    if(this.newTaskTitle && this.newTaskTitle.trim()){
         const newTodo: Todo = {
         id: this.todoService.getTodoNewId(),
         title: this.newTaskTitle,

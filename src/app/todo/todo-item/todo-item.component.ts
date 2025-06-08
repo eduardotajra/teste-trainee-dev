@@ -22,12 +22,10 @@ export class TodoItemComponent {
   editTodo(): void {
     const newTitle = this.todoService.sharedTaskTitle;
 
-    // 2. Se o campo de texto principal estiver vazio, não faz nada.
     if (!newTitle || !newTitle.trim() || newTitle == null) {
       alert("Por favor, digite o novo título no campo 'Título da Tarefa' antes de clicar em Editar.");
       return;
     }
-    // 3. Atualiza o título da tarefa ATUAL com o texto do serviço.
     this.todo.title = newTitle;
     this.todoService.updateTodo(this.todo);
   }
