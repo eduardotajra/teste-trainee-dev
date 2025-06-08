@@ -23,7 +23,7 @@ export class TodoItemComponent {
     const newTitle = this.todoService.sharedTaskTitle;
 
     // 2. Se o campo de texto principal estiver vazio, não faz nada.
-    if (!newTitle || !newTitle.trim()) {
+    if (!newTitle || !newTitle.trim() || newTitle == null) {
       alert("Por favor, digite o novo título no campo 'Título da Tarefa' antes de clicar em Editar.");
       return;
     }
