@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Todo } from '../../shared/models/todo.model';
 import { TodoService } from 'src/app/shared/services/todo.service';
+import { Filter } from 'bad-words';
 
 @Component({
   selector: 'app-new-task',
@@ -18,35 +19,56 @@ export class NewTaskComponent {
   }
 
   addTask() {
-    if (this.newTaskTitle && this.newTaskTitle.trim()) {
-      const trimmedInput = this.newTaskTitle.trim();
-      if (trimmedInput.includes('|')) {
-        const titles = trimmedInput.split('|');
-        
-        titles.forEach(titlePart => {
-          const finalTitle = titlePart.trim();
 
-          if (finalTitle) { 
-            const newTodo: Todo = {
-              id: this.todoService.getTodoNewId(),
-              title: finalTitle,
-              completed: false
-            };
-            this.todoService.addTodo(newTodo);
-          }
-        });
+  if (this.newTaskTitle && this.newTaskTitle.trim()) {
+    const filter = new Filter();
 
-      } else {
-        const newTodo: Todo = {
-          id: this.todoService.getTodoNewId(),
-          title: trimmedInput,
-          completed: false
-        };
-        this.todoService.addTodo(newTodo);
-      }
-      this.newTaskTitle = '';
-    } else {
-      alert("O título da tarefa não pode estar em branco.");
+    const palavroes = [
+      'cu', 'cú', 'porra', 'caralho', 'krl', 'krlh', 'cacete', 'merda',
+      'bosta', 'foder', 'fuder', 'foda', 'foda-se', 'fds',
+      'arrombado', 'arrombada', 'babaca', 'otario', 'otário', 'idiota', 'imbecil',
+      'retardado', 'retardada', 'vagabundo', 'vagabunda', 'puta', 'puto',
+      'piranha', 'vadia', 'viado', 'filho da puta', 'fdp',
+      'buceta', 'bct', 'pau', 'pinto', 'rola', 'xoxota', 'grelo',
+      'siririca', 'boquete', 'punheta', 'brocha', 'xereca', 'xrc'
+    ];
+
+    filter.addWords(...palavroes);
+
+    if (filter.isProfane(this.newTaskTitle)) {
+      alert("Não é permitido cadastrar tarefas com palavras obscenas.");
+      return;
     }
+
+    const trimmedInput = this.newTaskTitle.trim();
+
+    if (trimmedInput.includes('|')) {
+      const titles = trimmedInput.split('|');
+
+      titles.forEach(titlePart => {
+        const finalTitle = titlePart.trim();
+        if (finalTitle) {
+          const newTodo: Todo = {
+            id: this.todoService.getTodoNewId(),
+            title: finalTitle,
+            completed: false
+          };
+          this.todoService.addTodo(newTodo);
+        }
+      });
+    } else {
+      const newTodo: Todo = {
+        id: this.todoService.getTodoNewId(),
+        title: trimmedInput,
+        completed: false
+      };
+      this.todoService.addTodo(newTodo);
+    }
+
+    this.newTaskTitle = '';
+
+  } else {
+    alert("O título da tarefa não pode estar em branco.");
   }
+}
 }
