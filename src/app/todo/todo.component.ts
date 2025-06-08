@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../shared/models/todo.model';
 import { TodoService } from '../shared/services/todo.service';
+import { jsPDF } from "jspdf";
 
 @Component({
   selector: 'app-todo',
@@ -12,6 +13,37 @@ export class TodoComponent implements OnInit {
   showCompletedTasks: boolean = true;
 
   constructor(private todoService: TodoService) { }
+
+  get visibleTodos(): Todo[] {
+    if (this.showCompletedTasks) {
+      return this.todos;
+    }
+    return this.todos.filter(todo => !todo.completed);
+  }
+
+  exportToPDF(): void {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Minha Lista de Tarefas", 14, 22);
+    doc.setFontSize(11);
+    let y = 35;
+
+    this.visibleTodos.forEach((task, index) => {
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+      }
+
+      const status = task.completed ? '[Concluída]' : '[Pendente]';
+      const taskText = `${status} - ${task.title}`;
+
+      doc.text(taskText, 14, y, { maxWidth: 180 });
+
+      y += 10;
+    });
+
+    doc.save('lista-de-tarefas.pdf');
+  }
 
   sortTasksAlphabetically(): void {
     this.todos.sort((a, b) => a.title.localeCompare(b.title));
