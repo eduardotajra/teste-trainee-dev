@@ -18,18 +18,35 @@ export class NewTaskComponent {
   }
 
   addTask() {
-    if(this.newTaskTitle && this.newTaskTitle.trim()){
-        const newTodo: Todo = {
-        id: this.todoService.getTodoNewId(),
-        title: this.newTaskTitle,
-        completed: false
-      };
+    if (this.newTaskTitle && this.newTaskTitle.trim()) {
+      const trimmedInput = this.newTaskTitle.trim();
+      if (trimmedInput.includes('|')) {
+        const titles = trimmedInput.split('|');
+        
+        titles.forEach(titlePart => {
+          const finalTitle = titlePart.trim();
 
-      this.todoService.addTodo(newTodo);
+          if (finalTitle) { 
+            const newTodo: Todo = {
+              id: this.todoService.getTodoNewId(),
+              title: finalTitle,
+              completed: false
+            };
+            this.todoService.addTodo(newTodo);
+          }
+        });
+
+      } else {
+        const newTodo: Todo = {
+          id: this.todoService.getTodoNewId(),
+          title: trimmedInput,
+          completed: false
+        };
+        this.todoService.addTodo(newTodo);
+      }
       this.newTaskTitle = '';
-    }
-    else{
-      alert("O título da tarefa não pode estar em branco.")
+    } else {
+      alert("O título da tarefa não pode estar em branco.");
     }
   }
 }
